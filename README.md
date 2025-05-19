@@ -34,7 +34,9 @@ events := []types.InputLogEvent{
         Timestamp: aws.Int64(now),
     },
 }
-cw.PutLogEvents(events)
+if err := cw.PutLogEvents(events); err != nil {
+    log.Printf("log failed: %v", err)
+}
 ```
 
 # Example

@@ -53,7 +53,7 @@ func TestStreamName(t *testing.T) {
 }
 
 func TestSendSimple(t *testing.T) {
-	client := &cloudWatchLogMock{groups: map[string]map[string][]types.InputLogEvent{}}
+	client := newCloudWatchLogMock()
 	cw, err := New(Options{
 		Client:    client,
 		Now:       func() time.Time { return time.Time{} },
@@ -84,7 +84,7 @@ func TestSendSimple(t *testing.T) {
 
 func TestChangeStream(t *testing.T) {
 	var now time.Time
-	client := &cloudWatchLogMock{groups: map[string]map[string][]types.InputLogEvent{}}
+	client := newCloudWatchLogMock()
 	cw, err := New(Options{
 		Client:    client,
 		Now:       func() time.Time { return now },
@@ -130,7 +130,7 @@ func TestChangeStream(t *testing.T) {
 }
 
 func TestGroupExists(t *testing.T) {
-	client := &cloudWatchLogMock{groups: map[string]map[string][]types.InputLogEvent{}}
+	client := newCloudWatchLogMock()
 
 	//
 	// first create group
@@ -194,6 +194,10 @@ func TestGroupExists(t *testing.T) {
 	if len(s) != 4 {
 		t.Fatalf("log lines: expected=4 found=%d", len(s))
 	}
+}
+
+func newCloudWatchLogMock() *cloudWatchLogMock {
+	return &cloudWatchLogMock{groups: map[string]map[string][]types.InputLogEvent{}}
 }
 
 type cloudWatchLogMock struct {

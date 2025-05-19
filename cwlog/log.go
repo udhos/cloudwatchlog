@@ -140,12 +140,8 @@ func genStream(templ *template.Template, group, stream string, now time.Time) (s
 	return buf.String(), err
 }
 
-func (l *Log) generateStreamName() string {
-	stream, err := genStream(l.templ, l.options.LogGroup, l.options.LogStream, l.options.Now())
-	if err != nil {
-		panic(err) // ugh
-	}
-	return stream
+func (l *Log) generateStreamName() (string, error) {
+	return genStream(l.templ, l.options.LogGroup, l.options.LogStream, l.options.Now())
 }
 
 // PutSimple sends a simple log line.
@@ -162,7 +158,10 @@ func (l *Log) PutSimple(s string) error {
 // PutLogEvents sends logs.
 func (l *Log) PutLogEvents(events []types.InputLogEvent) error {
 
-	logStream := l.generateStreamName()
+	logStream, errStream := l.generateStreamName()
+	if errStream != nil {
+		return errStream
+	}
 
 	if logStream != l.logStreamName {
 		//
