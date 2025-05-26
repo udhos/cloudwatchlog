@@ -240,7 +240,7 @@ func (m *cloudWatchLogMock) PutRetentionPolicy(_ context.Context,
 func (m *cloudWatchLogMock) CreateLogStream(_ context.Context,
 	params *cloudwatchlogs.CreateLogStreamInput,
 	_ ...func(*cloudwatchlogs.Options)) (*cloudwatchlogs.CreateLogStreamOutput, error) {
-	if m.denyCreateGroup {
+	if m.denyCreateStream {
 		return nil, errors.New("create stream denied")
 	}
 	groupName := aws.ToString(params.LogGroupName)
