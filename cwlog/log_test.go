@@ -277,9 +277,7 @@ func (m *cloudWatchLogMock) PutLogEvents(_ context.Context,
 		return nil, fmt.Errorf("stream not found: group=%s stream=%s",
 			groupName, streamName)
 	}
-	for _, e := range params.LogEvents {
-		s = append(s, e)
-	}
+	s = append(s, params.LogEvents...)
 	g[streamName] = s
 	return &cloudwatchlogs.PutLogEventsOutput{}, nil
 }
